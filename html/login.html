@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="../css/style.css">
+		<title></title>
+		<style type="text/css">
+			
+			
+			#content input[type=text], #content input[type=password] {
+				width: 288px;
+				border-radius: 5px;
+				border: 1px solid #ccc;
+				-webkit-appearance: textfield;
+				padding: 1px;
+				background-color: white;
+				border: 1px solid silver;
+				border-image: initial;
+				-webkit-rtl-ordering: logical;
+				-webkit-user-select: text;
+				cursor: auto;
+				line-height: 1.5em;
+			}
+			.buttons {
+				margin-top: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="login-dialog" class="dialog" style="display: block; top: 0px; ">
+			
+		</div>
+		<div id="container">  
+		    	<img class="logo" src="../img/meiwei-logo-27.png">
+		    	<h1>美味书签<span>用户登录</span></h1>
+		    	<div class="clearfix"></div>   	
+		    	<div id="content" class="clearfix">
+				<div class="error"></div> 
+				<div class="left clearfix">
+					<h4>邮箱：</h4> 
+					<input name="email" type="text" tabindex="1" autofocus> 
+					<h4>密码：</h4> 
+					<input name="password" type="password" tabindex="2"> 
+					<br />
+					<span class="forgetp"><a href="/password/forgot">忘记密码？</a></span> 
+					<div class="buttons">
+						<a id="login-submit" class="button green-button" href="#" tabindex="3">登录</a> 
+						<a class="grey-button button" href="">取消</a> 
+					</div>
+				</div>
+				<div class="right"> 
+					<h4>使用其他账号登录：</h4>  
+					<a target="_blank" href="http://mei.fm/login/qqweibo"><img src="http://mei.fm/static/img/tencent.png">腾讯微博</a>  
+					<a target="_blank" href="http://mei.fm/login/renren"><img src="http://mei.fm/static/img/renren.png">人人网</a> 
+				</div> 
+		    	</div>	
+	    </div>
+		<div id="footer">
+		    	<p class="left">©2012 <a href="http://mei.fm" target="_blank">美味书签</a></p>
+		    	<p class="right"><a href="http://team.mei.fm" target="_blank">团队博客</a> | <a href="http://weibo.com/mei.fm" target="_blank">新浪微博</a> | <a href="http://site.douban.com/145505/" target="_blank">豆瓣网</a> | <a href="http://page.renren.com/601254313/index" target="_blank">人人网</a></p>
+	    </div>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/api.js"></script>
+		<script type="text/javascript">
+			$('input[type=password]').keypress(function(e) {
+				if(e.keyCode === 13) {
+					$('#login-submit').click();		
+				}
+			});
+			$('#login-submit').click(function() {
+				var url = 'http://mei.fm/login',
+					email = $('[name=email]').val(),
+					password = $('[name=password]').val();
+				api.send_login_request(email, password, {
+					failed: function(data) {
+						$('.error').text(data.error_msg);
+					},
+					success: function(data) {
+						chrome.extension.sendRequest({'action': 'login'});
+						localStorage['email'] = email;
+						localStorage['password'] = password;
+						localStorage['uid'] = data.logged_in_user_id;
+						localStorage['username'] = data.logged_in_username;
+						api.get_default_stack(data.logged_in_user_id);
+						window.close();
+					}
+				});
+			});
+		</script>
+	</body>
+</html>

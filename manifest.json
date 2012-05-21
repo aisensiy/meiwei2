@@ -1,0 +1,27 @@
+{
+  "name": "美味书签收藏工具",
+  "version": "1.0",
+  "description": "美味书签网站的书签收藏工具，支持书签的一键收藏、书签的导入导出.",
+  "icons": {
+      "19": "icon19.png",
+      "32": "icon32.png",
+      "48": "icon48.png",
+      "64": "icon64.png",
+      "128":"icon128.png"
+  },
+  "background_page": "background.html",
+  "options_page" : "options.html",
+  "browser_action" : {
+      "default_title": "收藏到美味书签",
+      "default_icon" : "icon19.png"
+  },
+  /*
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js" :[ "js/jquery.min.js", "js/in.js"]
+    }
+  ],
+  */
+  "permissions": ["tabs", "bookmarks", "http://*/*", "https://*/*", "chrome://favicon/", "notifications"]
+}
